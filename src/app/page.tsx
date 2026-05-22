@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
 
-const API = "https://dgcrux-backend.vercel.app/api"
+const API = process.env.REACT_APP_BACKEND_URL
 const ADMIN_KEY = "dgcrux-admin-2026"
 
 export default function AdminDashboard() {
