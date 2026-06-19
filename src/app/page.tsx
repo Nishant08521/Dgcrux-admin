@@ -3,8 +3,13 @@
 import { useState, useEffect } from "react"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
 
-const API = process.env.REACT_APP_BACKEND_URL
+const API = process.env.NEXT_PUBLIC_BACKEND_URL?.trim().replace(/\/$/, "") || ""
 const ADMIN_KEY = "dgcrux-admin-2026"
+
+const buildApiUrl = (endpoint: string) => {
+  if (!API) throw new Error("Missing NEXT_PUBLIC_BACKEND_URL")
+  return `${API}${endpoint}`
+}
 
 export default function AdminDashboard() {
   const [adminKey, setAdminKey] = useState("")
@@ -39,7 +44,7 @@ export default function AdminDashboard() {
 
   // -- API Calls --
   const apiFetch = async (endpoint: string) => {
-    const res = await fetch(`${API}${endpoint}`, { headers: { "x-admin-key": adminKey } })
+    const res = await fetch(buildApiUrl(endpoint), { headers: { "x-admin-key": adminKey } })
     if (res.status === 401) throw new Error("Unauthorized")
     return res.json()
   }
@@ -130,7 +135,7 @@ export default function AdminDashboard() {
       if (certForm.dob) formData.append("dob", certForm.dob)
       formData.append("image", certFile)
 
-      const res = await fetch(`${API}/api/admin/certificates`, {
+      const res = await fetch(buildApiUrl("/api/admin/certificates"), {
         method: "POST",
         headers: { "x-admin-key": adminKey },
         body: formData
@@ -155,7 +160,7 @@ export default function AdminDashboard() {
     e.preventDefault()
     setLoginError("")
     try {
-      const res = await fetch(`${API}/api/admin/stats`, { headers: { "x-admin-key": adminKey } })
+      const res = await fetch(buildApiUrl("/api/admin/stats"), { headers: { "x-admin-key": adminKey } })
       if (res.status === 401) throw new Error("Invalid key")
       setIsLoggedIn(true)
     } catch {
@@ -202,7 +207,7 @@ export default function AdminDashboard() {
     if (!id) return showToast("Invalid record id", "error")
     if (!confirm("Delete this record? This action cannot be undone.")) return
     try {
-      const res = await fetch(`${API}/api/admin/${listType}/${id}`, { method: "DELETE", headers: { "x-admin-key": adminKey } })
+      const res = await fetch(buildApiUrl(`/api/admin/${listType}/${id}`), { method: "DELETE", headers: { "x-admin-key": adminKey } })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || "Delete failed")
       showToast("Record deleted")
@@ -498,9 +503,9 @@ export default function AdminDashboard() {
                           <th className="px-6 py-4 font-semibold">Course</th>
                           <th className="px-6 py-4 font-semibold">Mode</th>
                           <th className="px-6 py-4 font-semibold">Date</th>
+                          <th className="px-6 py-4 font-semibold">Actions</th>
                         </>
                       )}
-                      <th className="px-6 py-4 font-semibold">Actions</th>
                       {activeTab === "contact" && (
                         <>
                           <th className="px-6 py-4 font-semibold">Name</th>
@@ -508,6 +513,7 @@ export default function AdminDashboard() {
                           <th className="px-6 py-4 font-semibold">Phone</th>
                           <th className="px-6 py-4 font-semibold">Project Details</th>
                           <th className="px-6 py-4 font-semibold">Date</th>
+                          <th className="px-6 py-4 font-semibold">Actions</th>
                         </>
                       )}
                       {activeTab === "bookcall" && (
@@ -518,6 +524,7 @@ export default function AdminDashboard() {
                           <th className="px-6 py-4 font-semibold">Work Email</th>
                           <th className="px-6 py-4 font-semibold">Project Details</th>
                           <th className="px-6 py-4 font-semibold">Date</th>
+                          <th className="px-6 py-4 font-semibold">Actions</th>
                         </>
                       )}
                       {activeTab === "certificates_list" && (
@@ -528,6 +535,7 @@ export default function AdminDashboard() {
                           <th className="px-6 py-4 font-semibold">Issue Date</th>
                           <th className="px-6 py-4 font-semibold">Image</th>
                           <th className="px-6 py-4 font-semibold">Uploaded</th>
+                          <th className="px-6 py-4 font-semibold">Actions</th>
                         </>
                       )}
                     </tr>
@@ -575,7 +583,7 @@ export default function AdminDashboard() {
                             <td className="px-6 py-4 text-slate-300">{row.course}</td>
                             <td className="px-6 py-4 text-slate-400">{new Date(row.issueDate).toLocaleDateString()}</td>
                             <td className="px-6 py-4 text-slate-400">
-                              <a href={`${API}${row.imagePath}`} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">View</a>
+                              <a href={buildApiUrl(row.imagePath)} target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">View</a>
                             </td>
                             <td className="px-6 py-4 text-slate-500 text-xs">{fmtDate(row.uploadedAt)}</td>
                           </>
