@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
 
-const API = process.env.NEXT_PUBLIC_BACKEND_URL?.trim().replace(/\/$/, "") || ""
+const API = "http://localhost:5001"
 const ADMIN_KEY = "dgcrux-admin-2026"
 
 const buildApiUrl = (endpoint: string) => {
-  if (!API) throw new Error("Missing NEXT_PUBLIC_BACKEND_URL")
   return `${API}${endpoint}`
 }
 
