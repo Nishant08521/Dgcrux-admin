@@ -1,9 +1,9 @@
-    "use client"
+"use client"
 
 import { useState, useEffect } from "react"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
 
-const API = "http://localhost:5001"
+const API = "https://api.dgcrux.com"
 const ADMIN_KEY = "dgcrux-admin-2026"
 
 const buildApiUrl = (endpoint: string) => {
@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   const [adminKey, setAdminKey] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loginError, setLoginError] = useState("")
-  
+
   const [activeTab, setActiveTab] = useState("dashboard")
   const [stats, setStats] = useState({ total: 0, internship: 0, contact: 0, bookcall: 0, certificates: 0 })
   const [data, setData] = useState<{ internship: any[], contact: any[], bookcall: any[], certificates: any[] }>({ internship: [], contact: [], bookcall: [], certificates: [] })
@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   const [certForm, setCertForm] = useState({ name: "", course: "", issueDate: "", certificateNumber: "", dob: "" })
   const [certFile, setCertFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
-  const [toast, setToast] = useState<{msg: string, type: string} | null>(null)
+  const [toast, setToast] = useState<{ msg: string, type: string } | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   // -- Helpers --
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || "Upload failed")
-      
+
       showToast("Certificate uploaded successfully")
       setCertForm({ name: "", course: "", issueDate: "", certificateNumber: "", dob: "" })
       setCertFile(null)
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `dgcrux-${type}-${new Date().toISOString().slice(0,10)}.csv`
+    a.download = `dgcrux-${type}-${new Date().toISOString().slice(0, 10)}.csv`
     a.click()
     URL.revokeObjectURL(url)
     showToast(`Exported ${items.length} records`)
@@ -223,18 +223,18 @@ export default function AdminDashboard() {
     if (!Array.isArray(items)) return []
     if (!searchQuery) return items
     const q = searchQuery.toLowerCase()
-    
+
     if (type === "internship") {
-      return items.filter(r => [r.fullName, r.email, r.phone, r.course, r.mode].some(v => String(v||"").toLowerCase().includes(q)))
+      return items.filter(r => [r.fullName, r.email, r.phone, r.course, r.mode].some(v => String(v || "").toLowerCase().includes(q)))
     }
     if (type === "contact") {
-      return items.filter(r => [r.fullName, r.businessEmail, r.contactNumber].some(v => String(v||"").toLowerCase().includes(q)))
+      return items.filter(r => [r.fullName, r.businessEmail, r.contactNumber].some(v => String(v || "").toLowerCase().includes(q)))
     }
     if (type === "bookcall") {
-      return items.filter(r => [r.name, r.companyEmail, r.contactNumber].some(v => String(v||"").toLowerCase().includes(q)))
+      return items.filter(r => [r.name, r.companyEmail, r.contactNumber].some(v => String(v || "").toLowerCase().includes(q)))
     }
     if (type === "certificates_list") {
-      return items.filter(r => [r.name, r.certificateNumber, r.course].some(v => String(v||"").toLowerCase().includes(q)))
+      return items.filter(r => [r.name, r.certificateNumber, r.course].some(v => String(v || "").toLowerCase().includes(q)))
     }
     return items
   }
@@ -276,36 +276,36 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-[#0d0f1a] text-slate-200 flex font-sans">
-      
+
       {/* Sidebar */}
       <aside className="w-64 bg-[#151726] border-r border-white/5 flex flex-col shrink-0">
         <div className="p-6 pb-8">
           <div className="text-2xl font-extrabold tracking-tight text-white">Dg<span className="text-orange-500">Crux</span></div>
         </div>
-        
+
         <div className="px-4 pb-4">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 mb-3">Navigation</p>
           <nav className="space-y-1">
-            <button onClick={() => {setActiveTab("dashboard"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === "dashboard" ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+            <button onClick={() => { setActiveTab("dashboard"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeTab === "dashboard" ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </button>
-            <button onClick={() => {setActiveTab("internship"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "internship" ? "bg-orange-500/10 text-orange-400 border border-orange-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+            <button onClick={() => { setActiveTab("internship"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "internship" ? "bg-orange-500/10 text-orange-400 border border-orange-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
               <div className="flex items-center gap-3"><GraduationCap className="w-4 h-4" /> Internship</div>
               <span className="bg-[#1c1f35] px-2 py-0.5 rounded-full text-[10px]">{stats.internship}</span>
             </button>
-            <button onClick={() => {setActiveTab("contact"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "contact" ? "bg-red-500/10 text-red-400 border border-red-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+            <button onClick={() => { setActiveTab("contact"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "contact" ? "bg-red-500/10 text-red-400 border border-red-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
               <div className="flex items-center gap-3"><Mail className="w-4 h-4" /> Contact Us</div>
               <span className="bg-[#1c1f35] px-2 py-0.5 rounded-full text-[10px]">{stats.contact}</span>
             </button>
-            <button onClick={() => {setActiveTab("bookcall"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "bookcall" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+            <button onClick={() => { setActiveTab("bookcall"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "bookcall" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
               <div className="flex items-center gap-3"><PhoneCall className="w-4 h-4" /> Book a Call</div>
               <span className="bg-[#1c1f35] px-2 py-0.5 rounded-full text-[10px]">{stats.bookcall}</span>
             </button>
             <div className="pt-2 mt-2 border-t border-white/5">
-              <button onClick={() => {setActiveTab("certificates"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "certificates" ? "bg-purple-500/10 text-purple-400 border border-purple-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+              <button onClick={() => { setActiveTab("certificates"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "certificates" ? "bg-purple-500/10 text-purple-400 border border-purple-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
                 <div className="flex items-center gap-3"><Upload className="w-4 h-4" /> Upload Certificate</div>
               </button>
-              <button onClick={() => {setActiveTab("certificates_list"); setSearchQuery("")}} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "certificates_list" ? "bg-purple-500/10 text-purple-400 border border-purple-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+              <button onClick={() => { setActiveTab("certificates_list"); setSearchQuery("") }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors justify-between ${activeTab === "certificates_list" ? "bg-purple-500/10 text-purple-400 border border-purple-500/20" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
                 <div className="flex items-center gap-3"><BadgeCheck className="w-4 h-4" /> Certificates</div>
                 <span className="bg-[#1c1f35] px-2 py-0.5 rounded-full text-[10px]">{stats.certificates}</span>
               </button>
@@ -330,20 +330,20 @@ export default function AdminDashboard() {
         <header className="h-20 border-b border-white/5 px-8 flex items-center justify-between shrink-0 bg-[#0d0f1a]/80 backdrop-blur-md z-10">
           <div>
             <h1 className="text-xl font-bold text-white capitalize">
-              {activeTab === "dashboard" ? "Overview" : 
-               activeTab === "bookcall" ? "Book a Free Call" : 
-               activeTab === "certificates" ? "Upload New Certificate" : 
-               activeTab === "certificates_list" ? "Verified Certificates" : 
-               activeTab + " Submissions"}
+              {activeTab === "dashboard" ? "Overview" :
+                activeTab === "bookcall" ? "Book a Free Call" :
+                  activeTab === "certificates" ? "Upload New Certificate" :
+                    activeTab === "certificates_list" ? "Verified Certificates" :
+                      activeTab + " Submissions"}
             </h1>
           </div>
           <div className="flex items-center gap-3">
             {activeTab !== "dashboard" && activeTab !== "certificates" && (
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                <input 
-                  type="text" 
-                  placeholder="Search records..." 
+                <input
+                  type="text"
+                  placeholder="Search records..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className="pl-9 pr-4 py-2 bg-[#151726] border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 w-64"
@@ -363,7 +363,7 @@ export default function AdminDashboard() {
 
         {/* Content Scroll */}
         <div className="flex-1 overflow-auto p-8">
-          
+
           {/* Dashboard Tab */}
           {activeTab === "dashboard" && (
             <div className="max-w-6xl mx-auto space-y-8">
@@ -421,11 +421,10 @@ export default function AdminDashboard() {
                         <tr key={i} className="hover:bg-white/[0.02] transition-colors">
                           <td className="px-6 py-4 font-medium text-white">{row._name}</td>
                           <td className="px-6 py-4">
-                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${
-                              row._color === "orange" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
-                              row._color === "red" ? "bg-red-500/10 text-red-400 border-red-500/20" :
-                              "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                            }`}>
+                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${row._color === "orange" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                                row._color === "red" ? "bg-red-500/10 text-red-400 border-red-500/20" :
+                                  "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                              }`}>
                               {row._type}
                             </span>
                           </td>
@@ -447,23 +446,23 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Student Name *</label>
-                    <input type="text" required value={certForm.name} onChange={e => setCertForm({...certForm, name: e.target.value})} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. Manish Raj" />
+                    <input type="text" required value={certForm.name} onChange={e => setCertForm({ ...certForm, name: e.target.value })} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. Manish Raj" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Course *</label>
-                    <input type="text" required value={certForm.course} onChange={e => setCertForm({...certForm, course: e.target.value})} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. Fundamentals of MERN Stack" />
+                    <input type="text" required value={certForm.course} onChange={e => setCertForm({ ...certForm, course: e.target.value })} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. Fundamentals of MERN Stack" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Issue Date *</label>
-                    <input type="date" required value={certForm.issueDate} onChange={e => setCertForm({...certForm, issueDate: e.target.value})} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-purple-500 transition-colors" />
+                    <input type="date" required value={certForm.issueDate} onChange={e => setCertForm({ ...certForm, issueDate: e.target.value })} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-purple-500 transition-colors" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Certificate Number *</label>
-                    <input type="text" required value={certForm.certificateNumber} onChange={e => setCertForm({...certForm, certificateNumber: e.target.value})} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. DG/26/1038" />
+                    <input type="text" required value={certForm.certificateNumber} onChange={e => setCertForm({ ...certForm, certificateNumber: e.target.value })} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="e.g. DG/26/1038" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Date of Birth (Optional)</label>
-                    <input type="text" value={certForm.dob} onChange={e => setCertForm({...certForm, dob: e.target.value})} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="dd-mm-yyyy" />
+                    <input type="text" value={certForm.dob} onChange={e => setCertForm({ ...certForm, dob: e.target.value })} className="w-full bg-[#1c1f35] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors" placeholder="dd-mm-yyyy" />
                   </div>
                   <div className="col-span-2 border-t border-white/5 pt-4">
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Certificate Image *</label>
