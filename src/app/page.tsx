@@ -425,8 +425,8 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4 font-medium text-white">{row._name}</td>
                           <td className="px-6 py-4">
                             <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${row._color === "orange" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
-                                row._color === "red" ? "bg-red-500/10 text-red-400 border-red-500/20" :
-                                  "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                              row._color === "red" ? "bg-red-500/10 text-red-400 border-red-500/20" :
+                                "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               }`}>
                               {row._type}
                             </span>
