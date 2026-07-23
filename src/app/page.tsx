@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
 
 const API = "https://api.dgcrux.com"
@@ -244,7 +245,9 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-[#0d0f1a] flex items-center justify-center p-4" style={{ background: "radial-gradient(ellipse at 60% 40%, #1a1540 0%, #0d0f1a 70%)" }}>
         <div className="bg-[#151726] border border-white/10 rounded-2xl p-10 w-full max-w-md shadow-2xl text-center">
-          <div className="text-3xl font-extrabold tracking-tight mb-2 text-white">Dg<span className="text-orange-500">Crux</span> Admin</div>
+          <div className="flex justify-center mb-4">
+            <Image src="/logo.png" alt="DgCrux Admin" width={180} height={60} className="object-contain" />
+          </div>
           <p className="text-slate-400 text-sm mb-8">Enter your admin key to access the dashboard</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="text-left">
@@ -280,7 +283,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside className="w-64 bg-[#151726] border-r border-white/5 flex flex-col shrink-0">
         <div className="p-6 pb-8">
-          <div className="text-2xl font-extrabold tracking-tight text-white">Dg<span className="text-orange-500">Crux</span></div>
+          <Image src="/logo.png" alt="DgCrux" width={140} height={40} className="object-contain" />
         </div>
 
         <div className="px-4 pb-4">
