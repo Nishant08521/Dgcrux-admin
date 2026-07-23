@@ -1,4 +1,4 @@
-"use client"
+    "use client"
 
 import { useState, useEffect } from "react"
 import { Search, LayoutDashboard, GraduationCap, Mail, PhoneCall, LogOut, Download, RefreshCw, FileText, BadgeCheck, Upload } from "lucide-react"
